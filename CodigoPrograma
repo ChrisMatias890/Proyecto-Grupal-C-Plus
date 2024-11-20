@@ -1,18 +1,20 @@
-// COMP-120 C9 ProgramaciÃ³n
+// COMP-120 C9 Programación
 // Trabajo Grupal
-// PropÃ³sito: Este programa tiene como objetivo simular la gestiÃ³n de una biblioteca utilizando programaciÃ³n orientada a objetos.
-// Nombre: Gabriel Colmenares, Christian A. MatÃ­as Alvarez, Jorge L. Pina Flores
+// Propósito: Este programa tiene como objetivo simular la gestión de una biblioteca utilizando programación orientada a objetos.
+// Nombre: Gabriel Colmenares, Christian A. Matías Alvarez, Jorge L. Pina Flores
 // Clase: 7
-// Fecha: 11/10/2024
+// Fecha: 23/11/2024
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
+
 using namespace std;
 
-// Definir el tamaÃ±o mÃ¡ximo de estantes y bibliotecarios
+// Definir el tamaño máximo de estantes y bibliotecarios
 const int MAX_ESTANTES = 10;
 const int MAX_BIBLIOTECARIOS = 5;
-const int MAX_LIBROS_POR_ESTANTE = 10; // MÃ¡ximo de libros por estante
+const int MAX_LIBROS_POR_ESTANTE = 10; // Máximo de libros por estante
 
 // Clase Libro
 class Libro {
@@ -23,7 +25,7 @@ public:
     Libro(string t = "", string a = "") : titulo(t), autor(a) {}
 
     ~Libro() {
-        // El destructor no imprime ningÃºn mensaje
+        // El destructor no imprime ningún mensaje
     }
 
     void mostrarInfo() const {
@@ -49,7 +51,7 @@ public:
             contadorLibros++;
             cout << "Libro '" << libro.titulo << "' agregado al estante." << endl;
         } else {
-            cout << "Estante lleno. No se pueden agregar mÃ¡s libros." << endl;
+            cout << "Estante lleno. No se pueden agregar más libros." << endl;
         }
     }
 
@@ -88,7 +90,7 @@ public:
         for (int i = 0; i < contadorLibros; i++) {
             delete libros[i];
         }
-        // El destructor no imprime ningÃºn mensaje
+        // El destructor no imprime ningún mensaje
     }
 };
 
@@ -104,7 +106,7 @@ public:
     }
 
     ~Bibliotecario() {
-        // El destructor no imprime ningÃºn mensaje
+        // El destructor no imprime ningún mensaje
     }
 };
 
@@ -121,13 +123,13 @@ public:
             estantes[contadorEstantes++] = Estante();
             cout << "Nuevo estante agregado a la biblioteca." << endl;
         } else {
-            cout << "No se pueden agregar mÃ¡s estantes. Biblioteca llena." << endl;
+            cout << "No se pueden agregar más estantes. Biblioteca llena." << endl;
         }
     }
 
     void agregarLibroAEstante(int estanteIndex, const Libro& libro) {
         if (estanteIndex < 1 || estanteIndex > contadorEstantes) {
-            cout << "Error: Estante no vÃ¡lido." << endl;
+            cout << "Error: Estante no valido." << endl;
         } else {
             estantes[estanteIndex - 1].agregarLibro(libro);
         }
@@ -138,7 +140,7 @@ public:
             bibliotecarios[contadorBibliotecarios++] = Bibliotecario(nombre);
             cout << "Bibliotecario '" << nombre << "' registrado." << endl;
         } else {
-            cout << "No se pueden registrar mÃ¡s bibliotecarios. Ya hay el mÃ¡ximo permitido." << endl;
+            cout << "No se pueden registrar mas bibliotecarios. Ya hay el maximo permitido." << endl;
         }
     }
 
@@ -182,11 +184,11 @@ public:
     }
 
     ~Biblioteca() {
-        // El destructor no imprime ningÃºn mensaje
+        // El destructor no imprime ningún mensaje
     }
 };
 
-// FunciÃ³n para leer enteros con validaciÃ³n
+// Función para leer enteros con validación
 int leerEntero(const string& mensaje) {
     int numero;
     cout << mensaje;
@@ -195,7 +197,7 @@ int leerEntero(const string& mensaje) {
         if (cin.fail()) {
             cin.clear();
             cin.ignore(10000, '\n');
-            cout << "Entrada no vÃ¡lida. " << mensaje;
+            cout << "Entrada no valida. " << mensaje;
         } else {
             break;
         }
@@ -203,13 +205,40 @@ int leerEntero(const string& mensaje) {
     return numero;
 }
 
-// FunciÃ³n principal
-int main() {
-    Biblioteca biblioteca;
-    bool salir = false;
+void volvermenu()
+{
+    string pregunta;
+      cout<<"\n Deseas volver al menu?"<<endl;
+            cout<< "Escoja su respuesta: ";
+            cin>>pregunta;
+            
+            if(pregunta == "si" || pregunta == "Si" || pregunta == "SI" )
+            {
+            	cin.ignore(); // Ignora el salto de linea 
+				system("cls");
+			}
+			else
+			{ 
+				cout<<"Gracias por usar nuestros servicios"<<endl;
+                exit(0); // Me perite cerrar el programa desde una función
+			}
+}
 
-    while (!salir) {
-        cout << "\n--- MenÃº Biblioteca ---\n";
+
+// Función principal
+int main () 
+{
+    // Implementación de variables o función:
+    char menu;
+    void volvermenu();
+    Biblioteca biblioteca;
+    
+// Declaración del menú con un do-while (ciclo de repetición)
+   do
+   {
+
+        
+        cout << "\n--- Menu Biblioteca ---\n";
         cout << "1. Agregar Estante\n";
         cout << "2. Agregar Libro a Estante\n";
         cout << "3. Registrar Bibliotecario\n";
@@ -217,18 +246,20 @@ int main() {
         cout << "5. Mostrar Bibliotecarios\n";
         cout << "6. Mostrar Estantes\n";
         cout << "7. Salir\n";
-        cout << "Selecciona una opciÃ³n: ";
-
-        int opcion = leerEntero("Selecciona una opciÃ³n: ");
-        switch (opcion) {
-            case 1: {
+        cout << "Selecciona una opcion: ";
+        cin >> menu;
+        
+        switch (menu) {
+            case '1': {
+                system("cls");
                 biblioteca.agregarEstante();
                 break;
             }
-            case 2: {
-                int numEstante = leerEntero("Ingrese el nÃºmero de estante: ");
+            case '2': {
+                system("cls");
+                int numEstante = leerEntero("Ingrese el numero de estante: ");
                 string titulo, autor;
-                cout << "Ingrese el tÃ­tulo del libro: ";
+                cout << "Ingrese el titulo del libro: ";
                 cin.ignore();
                 getline(cin, titulo);
                 cout << "Ingrese el autor del libro: ";
@@ -236,7 +267,8 @@ int main() {
                 biblioteca.agregarLibroAEstante(numEstante, Libro(titulo, autor));
                 break;
             }
-            case 3: {
+            case '3': {
+                system("cls");
                 string nombre;
                 cout << "Ingrese el nombre del bibliotecario: ";
                 cin.ignore();
@@ -244,7 +276,8 @@ int main() {
                 biblioteca.registrarBibliotecario(nombre);
                 break;
             }
-            case 4: {
+            case '4': {
+                system("cls");
                 string nombre;
                 cout << "Ingrese el nombre del bibliotecario a eliminar: ";
                 cin.ignore();
@@ -252,22 +285,27 @@ int main() {
                 biblioteca.eliminarBibliotecario(nombre);
                 break;
             }
-            case 5: {
+            case '5': {
+                system("cls");
                 biblioteca.mostrarBibliotecarios();
+                volvermenu();
                 break;
             }
-            case 6: {
+            case '6': {
+                system("cls");
                 biblioteca.mostrarEstantes();
+                volvermenu();
                 break;
             }
-            case 7: {
-                salir = true;
+            case '7': {
+                cout << "Saliendo del programa...";
+                return 0;
                 break;
             }
             default:
-                cout << "OpciÃ³n no vÃ¡lida, intente de nuevo." << endl;
+                cout << "Opcion no valida, intente de nuevo." << endl;
         }
-    }
+    } while (menu !=7);
 
-    return 0;
+
 }
