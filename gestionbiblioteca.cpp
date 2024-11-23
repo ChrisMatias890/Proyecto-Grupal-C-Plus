@@ -3,51 +3,57 @@
 // Propósito: Este programa tiene como objetivo simular la gestión de una biblioteca utilizando programación orientada a objetos.
 // Nombre: Gabriel Colmenares, Christian A. Matías Alvarez, Jorge L. Pina Flores
 // Clase: 7
-// Fecha: 11/10/2024
+// Fecha: 1110/2024
 
-#include <iostream>
-#include <string>
-#include <cstdlib>
+#include <iostream>  // Biblioteca para entrada y salida de datos (cout, cin)
+#include <string>    // Biblioteca para trabajar con cadenas de texto (string)
+#include <cstdlib>   // Biblioteca para funciones generales, como exit()
 
 using namespace std;
 
 // Definir el tamaño máximo de estantes y bibliotecarios
-const int MAX_ESTANTES = 10;
-const int MAX_BIBLIOTECARIOS = 5;
-const int MAX_LIBROS_POR_ESTANTE = 10; // Máximo de libros por estante
+const int MAX_ESTANTES = 10;               // Establece el número máximo de estantes en la biblioteca.
+const int MAX_BIBLIOTECARIOS = 5;           // Define el número máximo de bibliotecarios que se pueden registrar.
+const int MAX_LIBROS_POR_ESTANTE = 10;     // Establece el número máximo de libros que puede almacenar cada estante.
 
-// Clase Libro
+// Clase Libro: Representa un libro en la biblioteca.
 class Libro {
 public:
-    string titulo;
-    string autor;
+    string titulo; // Título del libro
+    string autor;  // Autor del libro
 
+    // Constructor de la clase Libro
+    // Inicializa el título y autor del libro cuando se crea un objeto.
     Libro(string t = "", string a = "") : titulo(t), autor(a) {}
 
-    ~Libro() {
-        // El destructor no imprime ningún mensaje
-    }
+    // Destructor de la clase Libro
+    // Este destructor no realiza ninguna acción específica, pero puede ser útil si se usa memoria dinámica.
+    ~Libro() {}
 
+    // Método para mostrar la información de un libro
     void mostrarInfo() const {
         cout << "Titulo: " << titulo << ", Autor: " << autor << endl;
     }
 };
 
-// Clase Estante
+// Clase Estante: Representa un estante donde se almacenan los libros.
 class Estante {
 public:
-    Libro* libros[MAX_LIBROS_POR_ESTANTE]; // Arreglo de punteros a libros
-    int contadorLibros = 0;
+    Libro* libros[MAX_LIBROS_POR_ESTANTE];  // Arreglo de punteros a objetos de la clase Libro
+    int contadorLibros = 0;  // Número de libros actuales en el estante
 
+    // Constructor de la clase Estante
+    // Inicializa los punteros de los libros en nullptr para indicar que no hay libros almacenados.
     Estante() {
         for (int i = 0; i < MAX_LIBROS_POR_ESTANTE; i++) {
-            libros[i] = nullptr;
+            libros[i] = nullptr;  // Inicializa todos los punteros a nullptr
         }
     }
 
+    // Método para agregar un libro al estante
     void agregarLibro(const Libro& libro) {
         if (contadorLibros < MAX_LIBROS_POR_ESTANTE) {
-            libros[contadorLibros] = new Libro(libro);
+            libros[contadorLibros] = new Libro(libro);  // Crea un nuevo objeto Libro en la memoria dinámica
             contadorLibros++;
             cout << "Libro '" << libro.titulo << "' agregado al estante." << endl;
         } else {
@@ -55,12 +61,14 @@ public:
         }
     }
 
+    // Método para eliminar un libro del estante
     void eliminarLibro(const string& titulo) {
         for (int i = 0; i < contadorLibros; i++) {
             if (libros[i] && libros[i]->titulo == titulo) {
-                delete libros[i];
+                delete libros[i];  // Libera la memoria del libro eliminado
                 libros[i] = nullptr;
 
+                // Reorganiza los libros en el estante para evitar huecos
                 for (int j = i; j < contadorLibros - 1; j++) {
                     libros[j] = libros[j + 1];
                 }
@@ -74,76 +82,85 @@ public:
         cout << "Error: El libro '" << titulo << "' no se encuentra en este estante." << endl;
     }
 
+    // Método para mostrar los libros de un estante
     void mostrarLibros() const {
         if (contadorLibros == 0) {
             cout << "No hay libros en este estante." << endl;
         } else {
             for (int i = 0; i < contadorLibros; i++) {
                 if (libros[i]) {
-                    libros[i]->mostrarInfo();
+                    libros[i]->mostrarInfo();  // Muestra la información de cada libro almacenado
                 }
             }
         }
     }
 
+    // Destructor de la clase Estante
+    // Libera la memoria de los libros almacenados en el estante cuando el estante es destruido.
     ~Estante() {
         for (int i = 0; i < contadorLibros; i++) {
-            delete libros[i];
+            delete libros[i];  // Libera la memoria de cada libro
         }
-        // El destructor no imprime ningún mensaje
     }
 };
 
-// Clase Bibliotecario
+// Clase Bibliotecario: Representa un bibliotecario en la biblioteca.
 class Bibliotecario {
 public:
-    string nombre;
+    string nombre; // Nombre del bibliotecario
 
+    // Constructor de la clase Bibliotecario
     Bibliotecario(string n = "") : nombre(n) {}
 
+    // Método para mostrar la información de un bibliotecario
     void mostrarInfo() const {
         cout << "Bibliotecario: " << nombre << endl;
     }
 
+    // Destructor de la clase Bibliotecario
     ~Bibliotecario() {
-        // El destructor no imprime ningún mensaje
+        // El destructor no realiza ninguna acción específica
     }
 };
 
-// Clase Biblioteca
+// Clase Biblioteca: Representa la biblioteca y maneja los estantes y bibliotecarios.
 class Biblioteca {
 public:
-    Estante estantes[MAX_ESTANTES];
-    Bibliotecario bibliotecarios[MAX_BIBLIOTECARIOS];
-    int contadorEstantes = 0;
-    int contadorBibliotecarios = 0;
+    Estante estantes[MAX_ESTANTES];             // Arreglo de estantes en la biblioteca
+    Bibliotecario bibliotecarios[MAX_BIBLIOTECARIOS];  // Arreglo de bibliotecarios registrados
+    int contadorEstantes = 0;  // Número actual de estantes en la biblioteca
+    int contadorBibliotecarios = 0;  // Número de bibliotecarios registrados
 
+    // Método para agregar un nuevo estante
     void agregarEstante() {
         if (contadorEstantes < MAX_ESTANTES) {
-            estantes[contadorEstantes++] = Estante();
+            estantes[contadorEstantes++] = Estante();  // Crea un nuevo estante
             cout << "Nuevo estante agregado a la biblioteca." << endl;
         } else {
             cout << "No se pueden agregar más estantes. Biblioteca llena." << endl;
         }
     }
 
+    // Método para agregar un libro a un estante específico
     void agregarLibroAEstante(int estanteIndex, const Libro& libro) {
         if (estanteIndex < 1 || estanteIndex > contadorEstantes) {
             cout << "Error: Estante no valido." << endl;
         } else {
-            estantes[estanteIndex - 1].agregarLibro(libro);
+            estantes[estanteIndex - 1].agregarLibro(libro);  // Llama al método para agregar el libro en el estante correspondiente
         }
     }
 
+    // Método para registrar un bibliotecario
     void registrarBibliotecario(const string& nombre) {
         if (contadorBibliotecarios < MAX_BIBLIOTECARIOS) {
-            bibliotecarios[contadorBibliotecarios++] = Bibliotecario(nombre);
+            bibliotecarios[contadorBibliotecarios++] = Bibliotecario(nombre);  // Registra un nuevo bibliotecario
             cout << "Bibliotecario '" << nombre << "' registrado." << endl;
         } else {
-            cout << "No se pueden registrar mas bibliotecarios. Ya hay el maximo permitido." << endl;
+            cout << "No se pueden registrar más bibliotecarios. Ya hay el máximo permitido." << endl;
         }
     }
 
+    // Método para eliminar un bibliotecario
     void eliminarBibliotecario(const string& nombre) {
         bool encontrado = false;
         for (int i = 0; i < contadorBibliotecarios; i++) {
@@ -162,6 +179,7 @@ public:
         }
     }
 
+    // Método para mostrar la lista de bibliotecarios
     void mostrarBibliotecarios() const {
         if (contadorBibliotecarios == 0) {
             cout << "No hay bibliotecarios registrados." << endl;
@@ -172,19 +190,21 @@ public:
         }
     }
 
+    // Método para mostrar los libros en los estantes
     void mostrarEstantes() const {
         if (contadorEstantes == 0) {
             cout << "No hay estantes en la biblioteca." << endl;
         } else {
             for (int i = 0; i < contadorEstantes; i++) {
                 cout << "Estante " << i + 1 << ":" << endl;
-                estantes[i].mostrarLibros();
+                estantes[i].mostrarLibros();  // Muestra los libros almacenados en el estante
             }
         }
     }
 
+    // Destructor de la clase Biblioteca
     ~Biblioteca() {
-        // El destructor no imprime ningún mensaje
+        // El destructor no realiza ninguna acción adicional
     }
 };
 
@@ -205,39 +225,28 @@ int leerEntero(const string& mensaje) {
     return numero;
 }
 
-void volvermenu()
-{
+// Función para volver al menú
+void volvermenu() {
     string pregunta;
-      cout<<"\n Deseas volver al menu?"<<endl;
-            cout<< "Escoja su respuesta: ";
-            cin>>pregunta;
-            
-            if(pregunta == "si" || pregunta == "Si" || pregunta == "SI" )
-            {
-            	cin.ignore(); // Ignora el salto de linea 
-				system("cls");
-			}
-			else
-			{ 
-				cout<<"Gracias por usar nuestros servicios"<<endl;
-                exit(0); // Me perite cerrar el programa desde una función
-			}
+    cout << "\nDeseas volver al menu?" << endl;
+    cout << "Escoja su respuesta: ";
+    cin >> pregunta;
+
+    if (pregunta == "si" || pregunta == "Si" || pregunta == "SI") {
+        cin.ignore(); // Ignora el salto de línea
+        system("cls");
+    } else {
+        cout << "Gracias por usar nuestros servicios" << endl;
+        exit(0); // Cierra el programa
+    }
 }
 
-
 // Función principal
-int main () 
-{
-    // Implementación de variables o función:
+int main() {
     char menu;
-    void volvermenu();
     Biblioteca biblioteca;
-    
-// Declaración del menú con un do-while (ciclo de repetición)
-   do
-   {
 
-        
+    do {
         cout << "\n--- Menu Biblioteca ---\n";
         cout << "1. Agregar Estante\n";
         cout << "2. Agregar Libro a Estante\n";
@@ -246,29 +255,26 @@ int main ()
         cout << "5. Mostrar Bibliotecarios\n";
         cout << "6. Mostrar Estantes\n";
         cout << "7. Salir\n";
-        cout << "Selecciona una opcion: ";
+        cout << "Selecciona una opción: ";
         cin >> menu;
-        
+
         switch (menu) {
-            case '1': {
-                system("cls");
+            case '1':
                 biblioteca.agregarEstante();
                 break;
-            }
             case '2': {
-                system("cls");
-                int numEstante = leerEntero("Ingrese el numero de estante: ");
+                int estanteIndex = leerEntero("Ingrese el número de estante (1 - " + to_string(MAX_ESTANTES) + "): ");
                 string titulo, autor;
-                cout << "Ingrese el titulo del libro: ";
+                cout << "Ingrese el título del libro: ";
                 cin.ignore();
                 getline(cin, titulo);
                 cout << "Ingrese el autor del libro: ";
                 getline(cin, autor);
-                biblioteca.agregarLibroAEstante(numEstante, Libro(titulo, autor));
+                Libro libro(titulo, autor);
+                biblioteca.agregarLibroAEstante(estanteIndex, libro);
                 break;
             }
             case '3': {
-                system("cls");
                 string nombre;
                 cout << "Ingrese el nombre del bibliotecario: ";
                 cin.ignore();
@@ -277,7 +283,6 @@ int main ()
                 break;
             }
             case '4': {
-                system("cls");
                 string nombre;
                 cout << "Ingrese el nombre del bibliotecario a eliminar: ";
                 cin.ignore();
@@ -285,27 +290,21 @@ int main ()
                 biblioteca.eliminarBibliotecario(nombre);
                 break;
             }
-            case '5': {
-                system("cls");
+            case '5':
                 biblioteca.mostrarBibliotecarios();
-                volvermenu();
                 break;
-            }
-            case '6': {
-                system("cls");
+            case '6':
                 biblioteca.mostrarEstantes();
-                volvermenu();
                 break;
-            }
-            case '7': {
-                cout << "Saliendo del programa...";
-                return 0;
+            case '7':
+                cout << "Gracias por usar el sistema de la biblioteca." << endl;
                 break;
-            }
             default:
-                cout << "Opcion no valida, intente de nuevo." << endl;
+                cout << "Opción no válida. Por favor intente de nuevo." << endl;
+                break;
         }
-    } while (menu !=7);
+        volvermenu();
+    } while (menu != '7');
 
-
+    return 0;
 }
